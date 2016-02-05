@@ -26,12 +26,12 @@ var heap = function (property) {
     var bubble = function (index) {return index < 2 || lt(parent(index), index) ? index - 1 : bubble(swap(index, parent(index)));};
 
     var sort = function (index) {
-        var l = left(index), r = right(index), length = heap.length, value;
+        var l = left(index), r = right(index), length = heap.length;
 
         // if there are no more childnodes, swap the value at the current index with the value at
         // end of the array, sort the value at the current index then remove and return the 
         // last array element (the minimum element)
-        if (length <= l) {swap(index, length); bubble(index); return heap.pop())[0];}
+        if (length <= l) {swap(index, length); bubble(index); return heap.pop();}
 
         // if the right node is in range and less then the left node then swap 
         // the child with the right node, otherwise swap with the left
