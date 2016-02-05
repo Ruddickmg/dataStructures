@@ -8,6 +8,8 @@
 
 var heap = function (property) {
 
+    var floor = Math.floor;
+
     // create the heap
     var heap = []; 
 
@@ -19,7 +21,7 @@ var heap = function (property) {
     var value = function (index) {return property ? heap[index - 1][property] : heap[index - 1];};
 
     // calculate the parent index
-    var parent = function (index) {return Math.floor(index/2)};
+    var parent = function (index) {return floor(index/2)};
 
     // calculate the indexes of the left and right
     var left = function (i) {return i * 2;};
