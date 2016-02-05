@@ -6,22 +6,23 @@
     other heap elements
                                                                                             */
 
-var heap = function (property) {
-
-    var floor = Math.floor;
+var heap = function (property) { 
 
     // create the heap
     var heap = []; 
 
     // swaps the parent index with the child, returns child's new index (parent index)
     // subtract one from each input to compensate for the array starting at 0 rather then 1
-    var swap = function (index, parentIndex) {heap[index] = heap.splice(parentIndex - 1, 1, heap[index - 1])[0]; return parentIndex;};
+    var swap = function (index, parentIndex) {
+        heap[index - 1] = heap.splice(parentIndex - 1, 1, heap[index - 1])[0]; 
+        return parentIndex;
+    };
 
     // get the value at the input index, compensate for whether there is a property being accessed or not
     var value = function (index) {return property ? heap[index - 1][property] : heap[index - 1];};
 
     // calculate the parent index
-    var parent = function (index) {return floor(index/2)};
+    var parent = function (index) {return Math.floor(index/2)};
 
     // calculate the indexes of the left and right
     var left = function (i) {return i * 2;};
@@ -49,15 +50,25 @@ var heap = function (property) {
 
     return {
         // add a value to the heap
-        push: function (value) {heap.push(value); return bubble(heap.length);}
+        push: function (value) {heap.push(value); return bubble(heap.length);},
 
         // remove and return the top item from the heap
         pop: function () {return sort(1);},
 
         // return the first value of the heap (lowest)
-        min: function () {return heap.slice(0,0)[0];},
+        min: function () {return heap.slice(0,1)[0];},
 
         // return the amount of elements in the heap (array)
-        size: function () {return heap.length;}
+        size: function () {return heap.length;},
+
+        // update an element in the heap, has an optional property argument used for accessing object properties
+        update: function (index, value, property) {
+            if(property){
+                heap[index][property] = value;
+            }else{
+                heap.splice(index, 1, value);
+            }
+            return bubble(index + 1);
+        }
     };
 };
