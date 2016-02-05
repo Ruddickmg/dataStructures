@@ -1,4 +1,11 @@
-// binary heap
+/* 
+    binary heap
+
+    takes a string as an optional argument, this string is used as the name of a property 
+    in a potential object to be accessed while assessing its value in relation to the 
+    other heap elements
+                                                                                            */
+
 var heap = function (property) {
 
     // create the heap
@@ -35,7 +42,7 @@ var heap = function (property) {
 
         // if the right node is in range and less then the left node then swap 
         // the child with the right node, otherwise swap with the left
-        return sort( swap( index, length > r && lt(r,l) ? r : l ));
+        return sort(swap(index, length > r && lt(r,l) ? r : l ));
     };
 
     return {
