@@ -3,7 +3,7 @@ using namespace std;
 
 int main() {
 
-    binaryHeap<int> *heap = new binaryHeap<int>{"go"};
+    binaryHeap<int> *heap = new binaryHeap<int>;
 
     heap->push(2);
     heap->push(5);

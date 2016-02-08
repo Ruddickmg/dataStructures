@@ -12,7 +12,7 @@ template <class heapElement>
 class binaryHeap {
     public:
 
-        explicit binaryHeap<heapElement> (std::string prop = NULL) : property{ prop } {};
+        explicit binaryHeap<heapElement> (std::string prop = "NULL") : property{ prop } {};
         int push (const heapElement & value);
         int size ();
         heapElement min ();

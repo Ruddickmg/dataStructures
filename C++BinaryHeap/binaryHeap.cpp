@@ -85,7 +85,8 @@ heapElement binaryHeap<heapElement>::sortHeap(int index) {
 template <class heapElement>
 void binaryHeap<heapElement>::showHeap() {
     int s = size();
-    std::cout << property << ": [";
+    if (property != "NULL") std::cout << property << ": ";
+    std::cout << "[";
     for ( int i = 0; i < s; i+=1) {
         std::cout << heap[i];
         if(i < size() - 1) std::cout << ", ";
