@@ -1,0 +1,13 @@
+read me:
+
+I chose a binary heap as the que, since i doubt there will be many jobs i dont think anything too extravagant was necessary.
+
+I used an array implimentation of the binary heap.
+
+I overloaded the equality operators for my job class so that jobs would easily be added and compared by the cue
+
+the cue organizes jobs based on which has the least amount of processes, and if they are equal, then by the number of ticks
+
+the jobs are held in a list, which is iterated over and has its ticks decremented each time tick is called, if the ticks drop below one, the job is removed from the job list
+
+only jobs that can fit within the allowed amount of processors can be added to the job list, taken from the wait cue as room frees

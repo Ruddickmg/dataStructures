@@ -1,0 +1,324 @@
+bool sorted(std::vector<int> arr, int low, int high ) {
+    while (low < high - 1)
+        if (arr[low] > arr[++low]) {
+            std::cout << "low at index: " << (low - 1) << " (" << arr[low - 1] << ") " << " is less then higher at index: " << low << " (" << arr[low] << ")" << std::endl;
+            return false;
+        }
+    return true;
+}
+
+template <typename elements>
+elements merge<elements>::sort(elements & array) {
+
+    int inc = 2, length = array.size(), low = length % inc, high = low + inc, end;
+
+    while(inc < length){ // while the incriment is less then the length
+
+        mergeSort(array, low, (low + high) / 2, high);
+
+        if(!sorted(array, low, high))
+            break;
+
+        high += inc;
+        low += inc;
+
+        if(low >= length){
+
+            // sort the end of the end of the array, then merge it into the larger previous section
+            mergeSort(array, 0, (end = length % inc) / 2, end);
+
+            if(!sorted(array, 0, end))
+                break;
+
+            mergeSort(array, 0, end, end + inc);
+
+            if(!sorted(array, 0, end + inc))
+                break;
+
+            inc *= 2;
+            low = length % inc;
+            high = low + inc;
+        }
+    }
+
+    //mergeSort(array, low, (low + length) / 2, length);
+    return array;
+};
+
+template <typename elements>
+void merge<elements>::mergeSort(elements & array, int low, int mid, int high) {
+
+    int count = low, beg = low, back = count, next, prev;
+
+    std::cout << "count: " << count << ", back: " << back << ", mid: " << mid << std::endl << std::endl;
+
+    while ( back < mid && mid < high) {
+
+        next = low + 1;
+        prev = low - 1;
+
+        // move back to count if
+        if (prev >= count && array[prev] < array[next]){
+            back = count;
+            std::cout << "if " << array[prev] << " is less then " << array[next] << " then back = count: " << count <<  std::endl;
+        }else if (back <= count) {
+            back = next < mid ? low : count;
+            std::cout << "if " << next << " is less then " << mid << " then back = low: " << low << " otherwise back = count: " << count << std::endl;
+        }
+
+        std::cout << std::endl << "after: ";
+        print(array, low, back, count, mid, high, beg);
+        std::cout << std::endl;
+
+        if(!sorted(array, beg, count))
+            break;
+
+        if(array[low] < array[mid]) {
+
+            std::cout << "low: " << low << " is less then mid: " << mid << ", swap count: " << array[count] << " with low: " << array[low] << std::endl;
+
+            // swap values
+            std::swap (array[count++], array[low]) ;
+
+            // incriment low
+            if(next < mid || back > count || back == low) {
+                std::cout << "incrimenting low: " << low << " to: " << next <<  std::endl;
+                low = next;
+            }
+
+            // move low to the next lowest value
+            if(low >= mid){
+                std::cout << "changing low: " << low << " to back: " << back << " and back: " << back << " to count: " << count << std::endl;
+                low = back;
+                back = count;
+            }
+
+        } else {
+
+            // move low marker where its value will be
+            if(low <= count) {
+                low = mid;
+                std::cout << "moving low: " << low << " to mid: " << mid << " in preperation for swap " << std::endl;
+            }else if(back <= count && next != mid) {
+                std::cout << "moving back: " << back << " to mid: " << mid << " in preperation for swap " << std::endl;
+                back = mid;
+            }
+
+            std::cout << " swapping count value: " << array[count] << " with mid value: " << array[mid] << std::endl;
+            // swap values
+            std::swap (array[count++], array[mid++]);
+
+            // keep sorting if the remaining array is not in order
+            if ( mid >= high && low > count ){
+                std::cout << "moving mid: " << mid << " to low: " << low << " and low to count: " << count << " in order to re seperate and merge remaining array" << std::endl;
+                mid = low;
+                low = count;
+            }
+        }
+    }
+}
+
+template class merge<std::vector<int>>;
+
+//template <typename elements>
+//void merge<elements>::mergeSort(elements & array, int low, int mid, int high) {
+//
+//    int count = low, beg = low, mark = high, back;
+//
+//    while (mid < high && low < mid && count < mid) {
+//
+//        if (array[low] < array[mid]) {
+//
+//            std::swap(array[count++], array[low]);
+//
+//            if (low != mid - 1) {
+//
+//                if (mark == high)
+//                    mark = low;
+//
+//                low += 1;
+//            }
+//
+//            if (mark < high) {
+//                std::cout << "mark at index " << mark << ": " << array[mark] << ", low at index " << low << ": " << array[low] << ", count: " << count << std::endl;
+//
+//                back = low - 1;
+//
+//                if (mark < count && low > count ) {
+//                    std::cout << "here!! : " << array[count] << "mark: " << array[mark] << std::endl;
+//                    mark = back;
+//                }
+//
+//                std::cout << "mark at index " << mark << ": " << array[mark] << ", low at index " << low << ": " << array[low] << std::endl;
+//
+//                if (array[mark] <= array[low] && mark >= count) {
+//
+//                    std::cout << "doing the thing" << std::endl;
+//
+//
+//
+//                    // here is where the change must go
+//                    if(back > mark && array[back] != array[low] || mark - 1 > low ) {
+//
+//                        std::cout << "swapping low: " << low << " and mark: " << mark << std::endl;
+//
+//                        std::swap(low, mark);
+//
+//                    } else {
+//                        low = mark;
+//                        if(array[count] == array[low])
+//                            mark = count;
+//                        else
+//                            mark = high;
+//                    }
+//                }
+//
+//                if (mark == low || low == count) {
+//                    std::cout << "shiza low:" << low << ", mark: " << mark << ", count: " << count << std::endl;
+//                    mark = high;
+//                }
+//            }
+//
+//        } else {
+//
+//            if(mark == count && array[count] < array[mid - 1]) {
+//                mark = mid;
+//            }else{
+//                std::cout << " mark: " << mark << ", count: " << count << ", count value: " << array[count] << ", mid value: " << array[mid - 1] << std::endl;
+//            }
+//
+//            std::swap(array[count++], array[mid++]);
+//
+//            if (count > low)
+//                low = mid - 1;
+//
+//            if(low - 1 >= count && array[low - 1] <= array[low])
+//            if(mark < high)
+//                low = mark;
+//            else
+//                low -= 1;
+//        }
+//
+//        std::cout << "after: ";
+//        print(array, low, mark, count, mid, high, beg);
+//        std::cout << std::endl;
+//    }
+//
+//    while (array[low] < array[low - 1] && low > count) {
+//        std::swap(array[low - 1], array[low]);
+//        low -= 1;
+//    }
+//
+//    std::cout << "finished: ";
+//    print(array, low, mark, count, mid, high, beg);
+//    std::cout << std::endl;
+//}
+
+
+// second ------------------------------------------------------------------
+
+//template <typename elements>
+//void merge<elements>::mergeSort(elements & array, int low, int mid, int high) {
+//
+//    int count = low, beg = low, mark = high, back;
+//
+//    while (mid < high && low < mid && count < mid) {
+//
+//        if (array[low] < array[mid]) {
+//
+//            // swap low (lowest value) with the counter position
+//            std::swap(array[count++], array[low]);
+//
+//            // incriment low
+//            if (low != mid - 1) {
+//
+//                // mark previous index as containing a lower value
+//                if (mark == high)
+//                    mark = low;
+//
+//                low += 1;
+//            }
+//
+//            // check if an index has been marked
+//            if (mark < high) {
+//
+//                // previous index
+//                back = low - 1;
+//
+//                // if the mark has been surpassed by the count, move it with the swap
+//                if (mark < count && low > count )
+//                    mark = back;
+//
+//                //
+//                if (array[mark] <= array[low] && mark >= count) {
+//
+//                    if(back > mark && array[back] != array[low] || mark - 1 > low ) {
+//
+//                        std::swap(low, mark);
+//
+//                    } else {
+//
+//                        low = mark;
+//
+//                        if(array[count] == array[low])
+//                            mark = count;
+//                        else
+//                            mark = high;
+//                    }
+//                }
+//
+//                // remove the mark if it is the same as the low or equal to the count
+//                if (mark == low || low < count)
+//                    mark = high;
+//            }
+//
+//        } else {
+//
+//            // move mark with swap
+//            if(mark == count && array[count] < array[mid - 1])
+//                mark = mid;
+//
+//            std::swap(array[count++], array[mid++]);
+//
+//            // move low with swap
+//            if (count > low)
+//                low = mid - 1;
+//        }
+//
+//        // previous index
+//        back = low - 1;
+//
+//        // change mark or low to its previous square if it is smaller
+//        if(back >= count && array[back] <= array[low])
+//
+//        if(mark < high) {
+//            std::cout << "changing low index: " << low << " to mark index: " << mark << std::endl;
+//            low = mark;
+//        }else {
+//            std::cout << "changing low index: " << low << " to previous index: " << back << std::endl;
+//            low = back;
+//        }
+//
+//        // change mark to its previous square if it is smaller
+//        if(mark - 1 >= count && array[mark - 1] <= array[mark] && mark < high) {
+//            std::cout << "moving mark index back one: " << mark << " to: " << (mark - 1) << std::endl;
+//            mark -= 1;
+//        }
+//
+//        std::cout << "after: ";
+//        print(array, low, mark, count, mid, high, beg);
+//        std::cout << std::endl;
+//    }
+//
+//
+//    while (array[low] < array[low - 1] && low > count) {
+//        std::swap(array[low - 1], array[low]);
+//        low -= 1;
+//    }
+//
+//    std::cout << "finished: ";
+//    print(array, low, mark, count, mid, high, beg);
+//    std::cout << std::endl;
+//}
+//
+//template class merge<std::vector<int>>;
